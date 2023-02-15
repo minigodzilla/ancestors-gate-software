@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ancestors' Gate</title>
+</head>
+
+<body style="background-color: black;">
+
+    <audio id="tone-1" src="dial-1.ogg" preload="auto" />
+    <audio id="tone-2" src="dial-2.ogg" preload="auto" />
+    <audio id="tone-3" src="dial-3.ogg" preload="auto" />
+    <audio id="tone-4" src="dial-4.ogg" preload="auto" />
+    <audio id="tone-5" src="dial-5.ogg" preload="auto" />
+    <audio id="tone-6" src="dial-6.ogg" preload="auto" />
+    <audio id="tone-7" src="dial-7.ogg" preload="auto" />
+    <audio id="tone-8" src="dial-8.ogg" preload="auto" />
+    <audio id="tone-9" src="dial-9.ogg" preload="auto" />
+    <audio id="tone-star" src="dial-star.ogg" preload="auto" />
+    <audio id="tone-0" src="dial-0.ogg" preload="auto" />
+    <audio id="tone-pound" src="dial-pound.ogg" preload="auto" />
+
+    <script>
+
+        function keyDownHandler(e) {
+            var evtobj = window.event ? event : e
+            if (evtobj.ctrlKey && evtobj.altKey && evtobj.shiftKey) {
+                if (evtobj.keyCode == 80) document.body.style.backgroundColor = "darkblue";
+                if (evtobj.keyCode == 72) document.body.style.backgroundColor = "black";
+            };
+            if (evtobj.keyCode == 49) {
+                tone = document.getElementById("tone-1");
+                tone.play();
+            }
+            if (evtobj.keyCode == 50) {
+                tone = document.getElementById("tone-2");
+                tone.play();
+            }
+            if (!evtobj.shiftKey && evtobj.keyCode == 51) {
+                tone = document.getElementById("tone-3");
+                tone.play();
+            }
+            if (evtobj.keyCode == 52) {
+                tone = document.getElementById("tone-4");
+                tone.play();
+            }
+            if (evtobj.keyCode == 53) {
+                tone = document.getElementById("tone-5");
+                tone.play();
+            }
+            if (evtobj.keyCode == 54) {
+                tone = document.getElementById("tone-6");
+                tone.play();
+            }
+            if (evtobj.keyCode == 55) {
+                tone = document.getElementById("tone-7");
+                tone.play();
+            }
+            if (!evtobj.shiftKey && evtobj.keyCode == 56) {
+                tone = document.getElementById("tone-8");
+                tone.play();
+            }
+            if (evtobj.keyCode == 57) {
+                tone = document.getElementById("tone-9");
+                tone.play();
+            }
+            if (evtobj.shiftKey && evtobj.keyCode == 56) {
+                tone = document.getElementById("tone-star");
+                tone.play();
+            }
+            if (evtobj.keyCode == 48) {
+                tone = document.getElementById("tone-0");
+                tone.play();
+            }
+            if (evtobj.shiftKey && evtobj.keyCode == 51) {
+                tone = document.getElementById("tone-pound");
+                tone.play();
+            }
+        }
+
+        function keyUpHandler(e) {
+            tone.pause();
+            tone.load();
+        }
+
+        document.onkeydown = keyDownHandler;
+        document.onkeyup = keyUpHandler;
+
+    </script>
+</body>
+
+</html>
