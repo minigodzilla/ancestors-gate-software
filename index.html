@@ -25,65 +25,46 @@
 
     <script>
 
+        function pickUp() {
+            document.body.style.backgroundColor = "darkblue";
+        }
+
+        function hangUp() {
+            document.body.style.backgroundColor = "black";
+        }
+
+        function playTone(t) {
+            tone = document.getElementById("tone-" + t);
+            tone.play();
+        }
+
+        function stopTone() {
+            tone.pause();
+            tone.load();
+        }
+
         function keyDownHandler(e) {
             var evtobj = window.event ? event : e
             if (evtobj.ctrlKey && evtobj.altKey && evtobj.shiftKey) {
-                if (evtobj.keyCode == 80) document.body.style.backgroundColor = "darkblue";
-                if (evtobj.keyCode == 72) document.body.style.backgroundColor = "black";
+                if (evtobj.keyCode == 80) pickUp();
+                if (evtobj.keyCode == 72) hangUp();
             };
-            if (evtobj.keyCode == 49) {
-                tone = document.getElementById("tone-1");
-                tone.play();
-            }
-            if (evtobj.keyCode == 50) {
-                tone = document.getElementById("tone-2");
-                tone.play();
-            }
-            if (!evtobj.shiftKey && evtobj.keyCode == 51) {
-                tone = document.getElementById("tone-3");
-                tone.play();
-            }
-            if (evtobj.keyCode == 52) {
-                tone = document.getElementById("tone-4");
-                tone.play();
-            }
-            if (evtobj.keyCode == 53) {
-                tone = document.getElementById("tone-5");
-                tone.play();
-            }
-            if (evtobj.keyCode == 54) {
-                tone = document.getElementById("tone-6");
-                tone.play();
-            }
-            if (evtobj.keyCode == 55) {
-                tone = document.getElementById("tone-7");
-                tone.play();
-            }
-            if (!evtobj.shiftKey && evtobj.keyCode == 56) {
-                tone = document.getElementById("tone-8");
-                tone.play();
-            }
-            if (evtobj.keyCode == 57) {
-                tone = document.getElementById("tone-9");
-                tone.play();
-            }
-            if (evtobj.shiftKey && evtobj.keyCode == 56) {
-                tone = document.getElementById("tone-star");
-                tone.play();
-            }
-            if (evtobj.keyCode == 48) {
-                tone = document.getElementById("tone-0");
-                tone.play();
-            }
-            if (evtobj.shiftKey && evtobj.keyCode == 51) {
-                tone = document.getElementById("tone-pound");
-                tone.play();
-            }
+            if (evtobj.keyCode == 49) playTone(1);
+            if (evtobj.keyCode == 50) playTone(2);
+            if (!evtobj.shiftKey && evtobj.keyCode == 51) playTone(3);
+            if (evtobj.keyCode == 52) playTone(4);
+            if (evtobj.keyCode == 53) playTone(5);
+            if (evtobj.keyCode == 54) playTone(6);
+            if (evtobj.keyCode == 55) playTone(7);
+            if (!evtobj.shiftKey && evtobj.keyCode == 56) playTone(8);
+            if (evtobj.keyCode == 57) playTone(9);
+            if (evtobj.shiftKey && evtobj.keyCode == 56) playTone("star");
+            if (evtobj.keyCode == 48) playTone(0);
+            if (evtobj.shiftKey && evtobj.keyCode == 51) playTone("pound");
         }
 
         function keyUpHandler(e) {
-            tone.pause();
-            tone.load();
+            stopTone();
         }
 
         document.onkeydown = keyDownHandler;
