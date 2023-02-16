@@ -77,8 +77,6 @@
         }
 
         function pickUp() {
-            console.log(body);
-            body.classList.add("pick-up");
             timerInitialState();
             timer = setInterval(() => {
                 if (timerValue <= 1) {
@@ -90,14 +88,14 @@
                     timerField.innerHTML = timerValue;
                 }
             }, 1000);
+            body.classList.add("pick-up");
         }
 
         function hangUp() {
-            body.classList.remove("pick-up");
-            body.classList.remove("play-video");
             video1.pause();
             video1.load();
             clearInterval(timer);
+            body.classList.remove("pick-up", "play-video");
         }
 
         function playTone(t) {
@@ -110,12 +108,17 @@
             tone.load();
         }
 
+        var isButton = true;
+
         function keyDownHandler(e) {
             var evtobj = window.event ? event : e
             if (evtobj.ctrlKey && evtobj.altKey && evtobj.shiftKey) {
+                isButton = false;
                 if (evtobj.keyCode == 80) pickUp();
                 if (evtobj.keyCode == 72) hangUp();
-            };
+            } else {
+                isButton = true;
+            }
             if (evtobj.keyCode == 49) playTone(1);
             if (evtobj.keyCode == 50) playTone(2);
             if (!evtobj.shiftKey && evtobj.keyCode == 51) playTone(3);
@@ -131,7 +134,8 @@
         }
 
         function keyUpHandler(e) {
-            stopTone();
+            var evtobj = window.event ? event : e
+            if (isButton) stopTone();
         }
 
         document.onkeydown = keyDownHandler;
