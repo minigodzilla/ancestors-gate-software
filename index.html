@@ -6,31 +6,98 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ancestors' Gate</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-family: sans-serif;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.pick-up {
+            background-color: darkblue;
+        }
+
+        #timer-field {
+            font-size: 200pt;
+            display: none;
+        }
+
+        #video-player {
+            font-size: 72pt;
+            display: none;
+        }
+
+        body.pick-up #timer-field,
+        body.play-video #video-player {
+            display: block;
+        }
+
+        body.play-video #timer-field {
+            display: none;
+        }
+    </style>
 </head>
 
-<body style="background-color: black;">
+<body>
+    <div id="timer-field"></div>
+    <div id="video-player">
+        <video class="video" id="video-1" src="video-1.mp4" preload="auto" />
+    </div>
 
-    <audio id="tone-1" src="dial-1.ogg" preload="auto" />
-    <audio id="tone-2" src="dial-2.ogg" preload="auto" />
-    <audio id="tone-3" src="dial-3.ogg" preload="auto" />
-    <audio id="tone-4" src="dial-4.ogg" preload="auto" />
-    <audio id="tone-5" src="dial-5.ogg" preload="auto" />
-    <audio id="tone-6" src="dial-6.ogg" preload="auto" />
-    <audio id="tone-7" src="dial-7.ogg" preload="auto" />
-    <audio id="tone-8" src="dial-8.ogg" preload="auto" />
-    <audio id="tone-9" src="dial-9.ogg" preload="auto" />
-    <audio id="tone-star" src="dial-star.ogg" preload="auto" />
-    <audio id="tone-0" src="dial-0.ogg" preload="auto" />
-    <audio id="tone-pound" src="dial-pound.ogg" preload="auto" />
+    <audio class="tone" id="tone-1" src="dial-1.ogg" preload="auto" />
+    <audio class="tone" id="tone-2" src="dial-2.ogg" preload="auto" />
+    <audio class="tone" id="tone-3" src="dial-3.ogg" preload="auto" />
+    <audio class="tone" id="tone-4" src="dial-4.ogg" preload="auto" />
+    <audio class="tone" id="tone-5" src="dial-5.ogg" preload="auto" />
+    <audio class="tone" id="tone-6" src="dial-6.ogg" preload="auto" />
+    <audio class="tone" id="tone-7" src="dial-7.ogg" preload="auto" />
+    <audio class="tone" id="tone-8" src="dial-8.ogg" preload="auto" />
+    <audio class="tone" id="tone-9" src="dial-9.ogg" preload="auto" />
+    <audio class="tone" id="tone-star" src="dial-star.ogg" preload="auto" />
+    <audio class="tone" id="tone-0" src="dial-0.ogg" preload="auto" />
+    <audio class="tone" id="tone-pound" src="dial-pound.ogg" preload="auto" />
 
     <script>
 
+        var body = document.querySelector("body");
+        var timerField = document.getElementById("timer-field");
+        var video1 = document.getElementById("video-1");
+
+        function timerInitialState() {
+            timerValue = 5;
+            timerField.innerHTML = timerValue;
+        }
+
         function pickUp() {
-            document.body.style.backgroundColor = "darkblue";
+            console.log(body);
+            body.classList.add("pick-up");
+            timerInitialState();
+            timer = setInterval(() => {
+                if (timerValue <= 1) {
+                    body.classList.add("play-video");
+                    clearInterval(timer);
+                    video1.play();
+                } else {
+                    timerValue--;
+                    timerField.innerHTML = timerValue;
+                }
+            }, 1000);
         }
 
         function hangUp() {
-            document.body.style.backgroundColor = "black";
+            body.classList.remove("pick-up");
+            body.classList.remove("play-video");
+            video1.pause();
+            video1.load();
+            clearInterval(timer);
         }
 
         function playTone(t) {
