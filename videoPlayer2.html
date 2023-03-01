@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Video Player 2</title>
+    <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <video id="video" src="assets/video/portal-fwd-tl.mp4" muted></video>
+    <script type="text/javascript">
+        const worker = new SharedWorker('js/videoSyncWorker.js');
+        const video = document.getElementById('video');
+        const cueButton = document.getElementById('cue-button');
+
+        worker.port.onmessage = function (event) {
+            if (event.data === 'cue') {
+                console.log('message received: cue');
+                video.currentTime = 0;
+                video.pause();
+            } else if (event.data === 'play') {
+                console.log('message received: play');
+                setTimeout(() => {
+                    video.play();
+                }, 500);
+            }
+        };
+    </script>
+</body>
+
+</html>

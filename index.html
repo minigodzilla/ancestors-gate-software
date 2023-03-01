@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ancestors' Gate</title>
+    <script type="text/javascript" src="js/videoSyncWorker.js"></script>
     <style>
         html,
         body {
@@ -32,7 +33,7 @@
 
         #video-player {
             font-size: 72pt;
-            display: none;
+            /* display: none; */
         }
 
         body.pick-up #timer-field,
@@ -50,23 +51,45 @@
     <div id="timer-field"></div>
 
     <div id="video-player">
-        <video class="video" id="video-1" src="video-1.mp4" preload="auto" />
+        <video class="video" id="video-1" src="assets/video/video-1.mp4" preload=""></video>
+        <button onclick="video.play()">Play</button>
     </div>
 
-    <audio class="tone" id="tone-1" src="dial-1.ogg" preload="auto" />
-    <audio class="tone" id="tone-2" src="dial-2.ogg" preload="auto" />
-    <audio class="tone" id="tone-3" src="dial-3.ogg" preload="auto" />
-    <audio class="tone" id="tone-4" src="dial-4.ogg" preload="auto" />
-    <audio class="tone" id="tone-5" src="dial-5.ogg" preload="auto" />
-    <audio class="tone" id="tone-6" src="dial-6.ogg" preload="auto" />
-    <audio class="tone" id="tone-7" src="dial-7.ogg" preload="auto" />
-    <audio class="tone" id="tone-8" src="dial-8.ogg" preload="auto" />
-    <audio class="tone" id="tone-9" src="dial-9.ogg" preload="auto" />
-    <audio class="tone" id="tone-star" src="dial-star.ogg" preload="auto" />
-    <audio class="tone" id="tone-0" src="dial-0.ogg" preload="auto" />
-    <audio class="tone" id="tone-pound" src="dial-pound.ogg" preload="auto" />
+    <audio class="tone" id="tone-1" src="assets/audio/dial-1.ogg" preload="auto" />
+    <audio class="tone" id="tone-2" src="assets/audio/dial-2.ogg" preload="auto" />
+    <audio class="tone" id="tone-3" src="assets/audio/dial-3.ogg" preload="auto" />
+    <audio class="tone" id="tone-4" src="assets/audio/dial-4.ogg" preload="auto" />
+    <audio class="tone" id="tone-5" src="assets/audio/dial-5.ogg" preload="auto" />
+    <audio class="tone" id="tone-6" src="assets/audio/dial-6.ogg" preload="auto" />
+    <audio class="tone" id="tone-7" src="assets/audio/dial-7.ogg" preload="auto" />
+    <audio class="tone" id="tone-8" src="assets/audio/dial-8.ogg" preload="auto" />
+    <audio class="tone" id="tone-9" src="assets/audio/dial-9.ogg" preload="auto" />
+    <audio class="tone" id="tone-star" src="assets/audio/dial-star.ogg" preload="auto" />
+    <audio class="tone" id="tone-0" src="assets/audio/dial-0.ogg" preload="auto" />
+    <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto" />
 
     <script>
+
+        // video player
+
+        // const worker = new SharedWorker('js/videoSyncWorker.js');
+        const video = document.getElementById('video-1');
+
+        // worker.port.onmessage = function (event) {
+        //     video.currentTime = event.data.currentTime;
+        //     video.playbackRate = event.data.playbackRate;
+        // };
+
+        // video.addEventListener('timeupdate', function () {
+        //     const currentTime = video.currentTime;
+        //     const playbackRate = video.playbackRate;
+
+        //     worker.port.postMessage({
+        //         currentTime,
+        //         playbackRate
+        //     });
+        // });
+
 
         const body = document.querySelector("body");
         const timerField = document.getElementById("timer-field");

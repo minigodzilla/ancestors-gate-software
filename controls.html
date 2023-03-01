@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Controls</title>
+    <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="button-row">
+        <button id="cue-button">Cue</button>
+        <button id="play-button">Play</button>
+    </div>
+    <script type="text/javascript">
+        const worker = new SharedWorker('js/videoSyncWorker.js');
+        const cueButton = document.getElementById('cue-button');
+        const playButton = document.getElementById('play-button');
+
+        cueButton.addEventListener('click', function () {
+            worker.port.postMessage('cue');
+        });
+
+        playButton.addEventListener('click', function () {
+            worker.port.postMessage('play');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Video Player 1</title>
+    <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <audio class="tone" id="tone-1" src="assets/audio/dial-1.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-2" src="assets/audio/dial-2.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-3" src="assets/audio/dial-3.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-4" src="assets/audio/dial-4.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-5" src="assets/audio/dial-5.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-6" src="assets/audio/dial-6.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-7" src="assets/audio/dial-7.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-8" src="assets/audio/dial-8.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-9" src="assets/audio/dial-9.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-star" src="assets/audio/dial-star.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-0" src="assets/audio/dial-0.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
+    <video id="video" src="assets/video/countdown.mp4"></video>
+
+    <script type="text/javascript">
+        const worker = new SharedWorker('js/videoSyncWorker.js');
+        const video = document.getElementById('video');
+
+        worker.port.onmessage = function (event) {
+            if (event.data === 'cue') {
+                console.log('message received: cue');
+                video.currentTime = 0;
+                video.pause();
+            } else if (event.data === 'play') {
+                console.log('message received: play');
+                video.play();
+            }
+        };
+
+        function pickUp() {
+            // play videos
+            worker.port.postMessage('play');
+        }
+
+        function hangUp() {
+            // cue videos
+            worker.port.postMessage('cue');
+        }
+
+        function playTone(t) {
+            tone = document.getElementById("tone-" + t);
+            tone.play();
+        }
+
+        function stopTone() {
+            tone.pause();
+            tone.load();
+        }
+
+        var isButton = true;
+
+        function keyDownHandler(e) {
+            var evtobj = window.event ? event : e
+            if (evtobj.ctrlKey && evtobj.altKey && evtobj.shiftKey) {
+                isButton = false;
+                if (evtobj.keyCode == 80) pickUp();
+                if (evtobj.keyCode == 72) hangUp();
+            } else {
+                isButton = true;
+            }
+            if (evtobj.keyCode == 49) playTone(1);
+            if (evtobj.keyCode == 50) playTone(2);
+            if (!evtobj.shiftKey && evtobj.keyCode == 51) playTone(3);
+            if (evtobj.keyCode == 52) playTone(4);
+            if (evtobj.keyCode == 53) playTone(5);
+            if (evtobj.keyCode == 54) playTone(6);
+            if (evtobj.keyCode == 55) playTone(7);
+            if (!evtobj.shiftKey && evtobj.keyCode == 56) playTone(8);
+            if (evtobj.keyCode == 57) playTone(9);
+            if (evtobj.shiftKey && evtobj.keyCode == 56) playTone("star");
+            if (evtobj.keyCode == 48) playTone(0);
+            if (evtobj.shiftKey && evtobj.keyCode == 51) playTone("pound");
+        }
+
+        function keyUpHandler(e) {
+            var evtobj = window.event ? event : e
+            if (isButton) stopTone();
+        }
+
+        document.onkeydown = keyDownHandler;
+        document.onkeyup = keyUpHandler;
+
+    </script>
+</body>
+
+</html>
