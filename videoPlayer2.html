@@ -3,26 +3,62 @@
 
 <head>
     <title>Video Player 2</title>
+    <link rel="shortcut icon" href="#">
     <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <video id="video" src="assets/video/portal-fwd-tl.mp4" muted></video>
-    <script type="text/javascript">
-        const worker = new SharedWorker('js/videoSyncWorker.js');
-        const video = document.getElementById('video');
-        const cueButton = document.getElementById('cue-button');
+    <audio class="tone" id="tone-1" src="assets/audio/dial-1.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-2" src="assets/audio/dial-2.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-3" src="assets/audio/dial-3.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-4" src="assets/audio/dial-4.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-5" src="assets/audio/dial-5.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-6" src="assets/audio/dial-6.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-7" src="assets/audio/dial-7.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-8" src="assets/audio/dial-8.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-9" src="assets/audio/dial-9.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-star" src="assets/audio/dial-star.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-0" src="assets/audio/dial-0.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
 
-        worker.port.onmessage = function (event) {
-            if (event.data === 'cue') {
-                console.log('message received: cue');
-                video.currentTime = 0;
-                video.pause();
-            } else if (event.data === 'play') {
-                console.log('message received: play');
+    <video id="video-fwd" src="assets/video/portal-fwd-tl.mp4" muted></video>
+    <video id="video-rev" src="assets/video/portal-rev-tl.mp4" muted></video>
+    <video id="video-hangup" src="assets/video/portal-hangup-tl.mp4" muted></video>
+
+    <script type="text/javascript">
+        const videoFwd = document.getElementById('video-fwd');
+        const videoRev = document.getElementById('video-rev');
+        const videoHangup = document.getElementById('video-hangup');
+
+        let postMessageHandler = function (event) {
+
+            if (event.data === 'userHungUpDuringCountdown') {
+                videoFwd.classList.remove("show");
+                videoRev.classList.remove("show");
+                videoHangup.classList.remove("show");
+
+                videoFwd.pause();
+            } else if (event.data === 'userHungUpDuringPortal') {
+                videoFwd.classList.remove("show");
+                videoRev.classList.remove("show");
+                videoHangup.classList.add("show");
+
+                videoFwd.pause();
+                videoHangup.currentTime = 0.75;
+                videoHangup.play();
                 setTimeout(() => {
-                    video.play();
+                    videoHangup.classList.remove("show");
+                }, 1500);
+            } else if (event.data === 'userPickedUp') {
+                setTimeout(() => {
+                    videoFwd.classList.add("show");
+                    videoRev.classList.remove("show");
+                    videoHangup.classList.remove("show");
+
+                    videoFwd.currentTime = 0;
+                    videoFwd.play();
                 }, 500);
             }
         };

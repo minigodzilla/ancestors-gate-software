@@ -3,7 +3,9 @@
 
 <head>
     <title>Video Player 1</title>
+    <link rel="shortcut icon" href="#">
     <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -20,75 +22,54 @@
     <audio class="tone" id="tone-star" src="assets/audio/dial-star.ogg" preload="auto"></audio>
     <audio class="tone" id="tone-0" src="assets/audio/dial-0.ogg" preload="auto"></audio>
     <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
-    <video id="video" src="assets/video/countdown.mp4"></video>
+
+    <video id="video-countdown" src="assets/video/countdown.mp4"></video>
+    <video id="video-shutoff" src="assets/video/shutoff.mp4"></video>
+    <video id="video-1" src="assets/video/video-1.mp4"></video>
 
     <script type="text/javascript">
-        const worker = new SharedWorker('js/videoSyncWorker.js');
-        const video = document.getElementById('video');
+        const videoCountdown = document.getElementById('video-countdown');
+        const videoShutoff = document.getElementById('video-shutoff');
+        const video1 = document.getElementById('video-1');
 
-        worker.port.onmessage = function (event) {
-            if (event.data === 'cue') {
-                console.log('message received: cue');
-                video.currentTime = 0;
-                video.pause();
-            } else if (event.data === 'play') {
-                console.log('message received: play');
-                video.play();
+        let postMessageHandler = function (event) {
+
+            if (event.data === 'userPickedUp') {
+                videoCountdown.classList.add("show");
+                videoShutoff.classList.remove("show");
+                video1.classList.remove("show");
+
+                videoCountdown.currentTime = 0;
+                videoCountdown.play();
+            } else if (event.data === 'inPortal') {
+                // we don't do anything
+            } else if (event.data === 'inContent') {
+                videoCountdown.classList.remove("show");
+                videoShutoff.classList.remove("show");
+                video1.classList.add("show");
+
+                video1.currentTime = 0;
+                video1.play();
+            } else if (event.data === 'userHungUpDuringCountdown') {
+                videoCountdown.classList.remove("show");
+                videoShutoff.classList.add("show");
+                video1.classList.remove("show");
+
+                videoCountdown.pause();
+                video1.pause();
+                videoShutoff.currentTime = 0;
+                videoShutoff.play();
+            } else if (event.data === 'userHungUpDuringPortal') {
+                videoCountdown.classList.remove("show");
+
+                videoCountdown.pause();
+                video1.pause();
+            } else if (event.data === 'userHungUpDuringContent') {
+                video1.classList.remove("show");
+
+                video1.pause();
             }
         };
-
-        function pickUp() {
-            // play videos
-            worker.port.postMessage('play');
-        }
-
-        function hangUp() {
-            // cue videos
-            worker.port.postMessage('cue');
-        }
-
-        function playTone(t) {
-            tone = document.getElementById("tone-" + t);
-            tone.play();
-        }
-
-        function stopTone() {
-            tone.pause();
-            tone.load();
-        }
-
-        var isButton = true;
-
-        function keyDownHandler(e) {
-            var evtobj = window.event ? event : e
-            if (evtobj.ctrlKey && evtobj.altKey && evtobj.shiftKey) {
-                isButton = false;
-                if (evtobj.keyCode == 80) pickUp();
-                if (evtobj.keyCode == 72) hangUp();
-            } else {
-                isButton = true;
-            }
-            if (evtobj.keyCode == 49) playTone(1);
-            if (evtobj.keyCode == 50) playTone(2);
-            if (!evtobj.shiftKey && evtobj.keyCode == 51) playTone(3);
-            if (evtobj.keyCode == 52) playTone(4);
-            if (evtobj.keyCode == 53) playTone(5);
-            if (evtobj.keyCode == 54) playTone(6);
-            if (evtobj.keyCode == 55) playTone(7);
-            if (!evtobj.shiftKey && evtobj.keyCode == 56) playTone(8);
-            if (evtobj.keyCode == 57) playTone(9);
-            if (evtobj.shiftKey && evtobj.keyCode == 56) playTone("star");
-            if (evtobj.keyCode == 48) playTone(0);
-            if (evtobj.shiftKey && evtobj.keyCode == 51) playTone("pound");
-        }
-
-        function keyUpHandler(e) {
-            var evtobj = window.event ? event : e
-            if (isButton) stopTone();
-        }
-
-        document.onkeydown = keyDownHandler;
-        document.onkeyup = keyUpHandler;
 
     </script>
 </body>
