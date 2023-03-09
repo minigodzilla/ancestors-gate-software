@@ -24,40 +24,54 @@
     <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
 
     <video id="video-fwd" src="assets/video/portal-fwd-tl.mp4" muted></video>
-    <video id="video-rev" src="assets/video/portal-rev-tl.mp4" muted></video>
+    <!-- <video id="video-rev" src="assets/video/portal-rev-tl.mp4" muted></video> -->
     <video id="video-hangup" src="assets/video/portal-hangup-tl.mp4" muted></video>
 
     <script type="text/javascript">
         const videoFwd = document.getElementById('video-fwd');
-        const videoRev = document.getElementById('video-rev');
+        // const videoRev = document.getElementById('video-rev');
         const videoHangup = document.getElementById('video-hangup');
 
         let postMessageHandler = function (event) {
 
             if (event.data === 'userHungUpDuringCountdown') {
                 videoFwd.classList.remove("show");
-                videoRev.classList.remove("show");
+                // videoRev.classList.remove("show");
                 videoHangup.classList.remove("show");
 
                 videoFwd.pause();
             } else if (event.data === 'userHungUpDuringPortal') {
                 videoFwd.classList.remove("show");
-                videoRev.classList.remove("show");
+                // videoRev.classList.remove("show");
                 videoHangup.classList.add("show");
 
                 videoFwd.pause();
-                videoHangup.currentTime = 0.75;
+                videoHangup.currentTime = 0;
                 videoHangup.play();
-                setTimeout(() => {
-                    videoHangup.classList.remove("show");
-                }, 1500);
+                // setTimeout(() => {
+                //     videoHangup.classList.remove("show");
+                // }, 1000);
+            } else if (event.data === 'userHungUpDuringContent') {
+                videoFwd.classList.remove("show");
+                // videoRev.classList.remove("show");
+                videoHangup.classList.add("show");
+
+                videoFwd.pause();
+                videoHangup.currentTime = 0;
+                videoHangup.play();
+                // setTimeout(() => {
+                //     videoHangup.classList.remove("show");
+                // }, 1000);
             } else if (event.data === 'userPickedUp') {
+                // videoRev.classList.remove("show");
+                videoHangup.classList.remove("show");
+
+                videoFwd.currentTime = 0;
+                // fixes a flicker
                 setTimeout(() => {
                     videoFwd.classList.add("show");
-                    videoRev.classList.remove("show");
-                    videoHangup.classList.remove("show");
-
-                    videoFwd.currentTime = 0;
+                }, 50);
+                setTimeout(() => {
                     videoFwd.play();
                 }, 500);
             }

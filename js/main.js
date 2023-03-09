@@ -75,6 +75,7 @@ function hangUp(e) {
 
 function playTone(t) {
     tone = document.getElementById("tone-" + t);
+    tone.volume = 0.2;
     tone.play();
 }
 

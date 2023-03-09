@@ -24,50 +24,67 @@
     <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
 
     <video id="video-countdown" src="assets/video/countdown.mp4"></video>
+    <video id="video-hangup" src="assets/video/portal-hangup.mp4"></video>
     <video id="video-shutoff" src="assets/video/shutoff.mp4"></video>
     <video id="video-1" src="assets/video/video-1.mp4"></video>
 
     <script type="text/javascript">
         const videoCountdown = document.getElementById('video-countdown');
+        const videoHangup = document.getElementById('video-hangup');
         const videoShutoff = document.getElementById('video-shutoff');
         const video1 = document.getElementById('video-1');
 
         let postMessageHandler = function (event) {
 
             if (event.data === 'userPickedUp') {
-                videoCountdown.classList.add("show");
+                videoHangup.classList.remove("show");
                 videoShutoff.classList.remove("show");
                 video1.classList.remove("show");
-
                 videoCountdown.currentTime = 0;
+                videoHangup.currentTime = 0;
+                videoShutoff.currentTime = 0;
+                video1.currentTime = 0;
                 videoCountdown.play();
-            } else if (event.data === 'inPortal') {
-                // we don't do anything
+                // fixes a flicker
+                setTimeout(() => {
+                    videoCountdown.classList.add("show");
+                }, 50);
+
             } else if (event.data === 'inContent') {
                 videoCountdown.classList.remove("show");
+                videoHangup.classList.remove("show");
                 videoShutoff.classList.remove("show");
+
                 video1.classList.add("show");
 
-                video1.currentTime = 0;
                 video1.play();
             } else if (event.data === 'userHungUpDuringCountdown') {
                 videoCountdown.classList.remove("show");
-                videoShutoff.classList.add("show");
+                videoHangup.classList.remove("show");
                 video1.classList.remove("show");
 
+                videoShutoff.classList.add("show");
+
                 videoCountdown.pause();
-                video1.pause();
-                videoShutoff.currentTime = 0;
                 videoShutoff.play();
             } else if (event.data === 'userHungUpDuringPortal') {
                 videoCountdown.classList.remove("show");
-
-                videoCountdown.pause();
-                video1.pause();
-            } else if (event.data === 'userHungUpDuringContent') {
+                videoShutoff.classList.remove("show");
                 video1.classList.remove("show");
 
+                videoHangup.classList.add("show");
+
+                videoCountdown.pause();
+                videoHangup.play();
+            } else if (event.data === 'userHungUpDuringContent') {
+                videoCountdown.classList.remove("show");
+                videoShutoff.classList.remove("show");
+                video1.classList.remove("show");
+
+                videoHangup.classList.add("show");
+
                 video1.pause();
+                videoHangup.play();
             }
         };
 
