@@ -5,6 +5,8 @@ let inPortal = false;
 let inContent = false;
 let countdownTimeout;
 let portalTimeout;
+let contentTimeout;
+let resetTimeout;
 let activeWindow;
 
 window.addEventListener("focus", (event) => {
@@ -26,6 +28,8 @@ worker.port.onmessage = function (event) {
         event.data === 'userHungUpDuringContent' ) {
         clearTimeout(countdownTimeout);
         clearTimeout(portalTimeout);
+        clearTimeout(contentTimeout);
+        clearTimeout(resetTimeout);
         inCountdown = false;
         inPortal = false;
         inContent = false;
@@ -33,28 +37,33 @@ worker.port.onmessage = function (event) {
 
     if (event.data === 'userPickedUp') {
         inCountdown = true;
-        inPortal = false;
-        inContent = false;
 
         countdownTimeout = setTimeout(() => {
             if (inCountdown) {
                 inCountdown = false;
                 inPortal = true;
-                inContent = false;
 
                 if (activeWindow) worker.port.postMessage("inPortal");
             }
-        }, 6000);
+        }, 5500);
 
         portalTimeout = setTimeout(() => {
             if (inPortal) {
-                inCountdown = false;
                 inPortal = false;
                 inContent = true;
 
                 if (activeWindow) worker.port.postMessage("inContent");
             }
         }, 10000);
+
+
+        resetTimeout = setTimeout(() => {
+            if (inContent) {
+                inContent = false;
+
+                if (activeWindow) worker.port.postMessage("contentFinished");
+            }
+        }, 66000);
 
     }
 };
