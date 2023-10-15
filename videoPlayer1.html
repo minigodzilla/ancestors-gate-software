@@ -27,18 +27,20 @@
     <video id="video-hangup" src="assets/video/portal-hangup.mp4"></video>
     <video id="video-rev" src="assets/video/portal-rev.mp4"></video>
     <video id="video-shutoff" src="assets/video/shutoff.mp4"></video>
-    <video id="video-1" src="assets/video/video-1.mp4"></video>
+    <video id="video-gawai" src="assets/video/video-gawai.mp4"></video>
+    <video id="video-paoakalani" src="assets/video/video-paoakalani.mp4"></video>
+    <video id="video-the-difference" src="assets/video/video-the-difference.mp4"></video>
 
     <script type="text/javascript">
         const videoCountdown = document.getElementById('video-countdown');
         const videoHangup = document.getElementById('video-hangup');
         const videoRev = document.getElementById('video-rev');
         const videoShutoff = document.getElementById('video-shutoff');
-        const video1 = document.getElementById('video-1');
 
         let postMessageHandler = function (event) {
 
             if (event.data === 'userPickedUp') {
+                video = document.getElementById('video-' + contentSlug);
                 videoHangup.classList.remove("show");
                 videoRev.classList.remove("show");
                 videoShutoff.classList.remove("show");
@@ -51,25 +53,25 @@
                 videoHangup.currentTime = 0;
                 videoRev.currentTime = 0;
                 videoShutoff.currentTime = 0;
-                video1.currentTime = 0;
+                video.currentTime = 0;
 
                 videoCountdown.play();
             } else if (event.data === 'inContent') {
                 videoCountdown.classList.remove("show");
 
-                video1.classList.add("show");
+                video.classList.add("show");
 
-                video1.play();
+                video.play();
 
                 // end of the content at 1m06s
                 // .5s added to compensate for timing issue w/video
                 contentTimeout = setTimeout(() => {
-                    video1.classList.remove("show");
+                    video.classList.remove("show");
                     videoRev.classList.add("show");
 
-                    video1.pause();
+                    video.pause();
                     videoRev.play();
-                }, 66500);
+                }, contentTimeout);
             } else if (event.data === 'userHungUpDuringCountdown') {
                 videoCountdown.classList.remove("show");
 
@@ -85,11 +87,11 @@
                 videoCountdown.pause();
                 videoHangup.play();
             } else if (event.data === 'userHungUpDuringContent') {
-                video1.classList.remove("show");
+                video.classList.remove("show");
 
                 videoHangup.classList.add("show");
 
-                video1.pause();
+                video.pause();
                 videoHangup.play();
             }
         };
