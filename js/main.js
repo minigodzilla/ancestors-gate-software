@@ -47,6 +47,8 @@ let resetTimeout;
 let activeWindow;
 let contentSlug;
 let contentTimeoutDuration;
+let userIsInvested;
+let dpsIsShown;
 
 window.addEventListener('focus', (event) => {
   activeWindow = true;
@@ -128,7 +130,6 @@ function getRandomVideo() {
 }
 
 function pickUp(e) {
-  getRandomVideo();
   worker.port.postMessage('userPickedUp');
 }
 

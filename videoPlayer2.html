@@ -28,7 +28,7 @@
     <video id="video-hangup" src="assets/video/portal-hangup-tl.mp4" muted></video>
 
     <div class="dps-container">
-        <div class="dps dps-paoakalani">
+        <div class="dps left dps-paoakalani">
             <h1>Kuʻu Pua I Paoakalani</h1>
             <div class="article">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non suscipit libero. Pellentesque aliquam felis elit, nec consequat diam pretium convallis. Nam non dapibus mi, eget posuere ex. Phasellus at felis at velit ornare semper vitae sit amet urna. Aliquam erat volutpat. Nulla facilisis nec eros a faucibus. Morbi laoreet viverra maximus. Aenean at sem dapibus leo varius vulputate. Cras sagittis pharetra urna ac molestie.</p>
@@ -45,6 +45,7 @@
         const videoFwd = document.getElementById('video-fwd');
         const videoRev = document.getElementById('video-rev');
         const videoHangup = document.getElementById('video-hangup');
+        const dps = document.querySelector('.dps-paoakalani');
 
         let postMessageHandler = function (event) {
 
@@ -59,15 +60,37 @@
                 videoFwd.pause();
                 videoHangup.play();
             } else if (event.data === 'userHungUpDuringContent') {
+                dps.classList.remove("show");
+                dps.classList.add("no-animation");
+                dpsIsShown = false;
                 videoFwd.classList.remove("show");
                 videoRev.classList.remove("show");
                 videoHangup.classList.add("show");
 
                 videoFwd.pause();
                 videoHangup.play();
+                // if user is invested, show DPS after 2.5 seconds and then hide after 1 minute
+                setTimeout(() => {
+                    if (userIsInvested) {
+                        dps.classList.remove("no-animation", "half-opacity");
+                        dps.classList.add("show");
+                        dpsIsShown = true;
+                        setTimeout(() => {
+                            userIsInvested = false;
+                            dps.classList.remove("show");
+                            dpsIsShown = false;
+                        }, 60000);
+                    }
+                }, 2500);
             } else if (event.data === 'userPickedUp') {
-                console.log('Content Slug:', contentSlug);
-                console.log('Content Timeout:', contentTimeoutDuration);
+                if (dpsIsShown) {
+                    // iterate through all DPS and hide them
+                    const dps = document.querySelectorAll('.dps');
+                    for (let i = 0; i < dps.length; i++) {
+                        dps[i].classList.remove("show");
+                    }
+                    dpsIsShown = false;
+                }
                 videoRev.classList.remove("show");
                 videoHangup.classList.remove("show");
 
@@ -80,10 +103,40 @@
                 videoHangup.currentTime = 0;
             } else if (event.data === 'inPortal') {
                 videoFwd.play();
+            } else if (event.data === 'inContent') {
+                setTimeout(() => {
+                    videoFwd.classList.remove("show");
+                }, 50);
+                // show DPS after 10 seconds
+                setTimeout(() => {
+                    if (inContent) {
+                        userIsInvested = true;
+                        console.log('userIsInvested: ' + userIsInvested);
+                        dps.classList.remove("no-animation");
+                        dps.classList.add("show", "half-opacity");
+                        dpsIsShown = true;
+                    }
+                }, 10000);
             } else if (event.data === 'contentFinished') {
+                dps.classList.add("no-animation");
+                dps.classList.remove("show");
+                dpsIsShown = false;
                 videoFwd.classList.remove("show");
                 videoRev.classList.add("show");
                 videoRev.play();
+                // show DPS after 5 seconds and then hide after 1 minute
+                setTimeout(() => {
+                    if (inContent) {
+                        userIsInvested = false;
+                        dps.classList.remove("no-animation", "half-opacity");
+                        dps.classList.add("show");
+                        dpsIsShown = true;
+                        setTimeout(() => {
+                            dps.classList.remove("show");
+                            dpsIsShown = false;
+                        }, 60000);
+                    }
+                }, 5000);
             }
         };
 
@@ -111,7 +164,6 @@
                 }
             }
         };
-
 
         // window.addEventListener('load', generateVideoHTML); 
     </script>

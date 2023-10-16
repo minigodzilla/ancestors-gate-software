@@ -40,6 +40,7 @@
         let postMessageHandler = function (event) {
 
             if (event.data === 'userPickedUp') {
+                getRandomVideo();
                 video = document.getElementById('video-' + contentSlug);
                 videoHangup.classList.remove("show");
                 videoRev.classList.remove("show");

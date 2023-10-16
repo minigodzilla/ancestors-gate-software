@@ -66,7 +66,33 @@ video.show {
     top: 0;
     left: 0;
     height: 100%;
-    padding: 3.5vw 17.5vw 3.5vw 3.5vw;
+    padding: 3.5vw;
+    -webkit-mask-size: 0%;
+    -webkit-mask-repeat: no-repeat;
+    transition: -webkit-mask-size 2s ease;
+}
+.dps-container .dps.half-opacity {
+    opacity: 0.5;
+}
+
+.dps-container .dps.no-animation {
+    transition: none;
+}
+
+.dps-container .dps.left {
+    padding-right: 18.5vw;
+    -webkit-mask-image: linear-gradient(135deg, transparent 30%, black 70%);
+    -webkit-mask-position: bottom right;
+}
+
+.dps-container .dps.right {
+    padding-left: 18.5vw;
+    -webkit-mask-image: linear-gradient(225deg, transparent 30%, black 70%);
+    -webkit-mask-position: bottom left;
+}
+
+.dps-container .dps.show {
+    -webkit-mask-size: 350%;
 }
 
 h1 {
