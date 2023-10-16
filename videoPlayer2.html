@@ -27,6 +27,20 @@
     <video id="video-rev" src="assets/video/portal-rev-tl.mp4" muted></video>
     <video id="video-hangup" src="assets/video/portal-hangup-tl.mp4" muted></video>
 
+    <div class="dps-container">
+        <div class="dps dps-paoakalani">
+            <h1>Kuʻu Pua I Paoakalani</h1>
+            <div class="article">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non suscipit libero. Pellentesque aliquam felis elit, nec consequat diam pretium convallis. Nam non dapibus mi, eget posuere ex. Phasellus at felis at velit ornare semper vitae sit amet urna. Aliquam erat volutpat. Nulla facilisis nec eros a faucibus. Morbi laoreet viverra maximus. Aenean at sem dapibus leo varius vulputate. Cras sagittis pharetra urna ac molestie.</p>
+                <p>Donec quis felis feugiat, porta dolor in, viverra arcu. Ut mollis imperdiet sagittis. Nunc posuere rutrum rutrum. Pellentesque congue fringilla tellus, eu ornare sapien pulvinar quis. Mauris at lacus luctus, porttitor nulla ac, aliquet orci. Nullam tortor ipsum, faucibus vitae neque ullamcorper, iaculis rhoncus sapien. Morbi ac mi neque. Nullam fermentum interdum tortor, sed auctor lectus tempor vitae. Phasellus ut viverra est. Ut porta sapien et ex euismod, eu efficitur lectus vehicula. Sed a mauris non diam ultrices rhoncus eget ut turpis. Nunc mollis consequat ex ut sodales. Quisque a commodo leo, in suscipit augue. Curabitur semper risus vitae lacus pulvinar, vel efficitur ligula ultricies. Etiam et tellus luctus, tempor risus a, rutrum arcu.</p>
+                <p>In rhoncus nunc id lorem fermentum luctus. Vestibulum dolor mi, pretium faucibus blandit nec, faucibus ac lacus. Donec at nibh sed ipsum venenatis lobortis vitae vel est. In hac habitasse platea dictumst. Vivamus leo erat, tincidunt ut varius ut, elementum vitae magna. Ut sit amet augue vitae dolor fermentum aliquet sed vitae lectus. Pellentesque rutrum sagittis lacus, ac lobortis magna ultrices at.</p>
+                <p>Maecenas congue gravida leo, non interdum diam interdum nec. Curabitur sapien nulla, molestie ultricies interdum eu, hendrerit sed metus. Proin et libero vestibulum, fringilla.</p>
+            </div>
+        </div>
+    </div>
+
+    <img src="assets/img/DPS.png" style="position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; opacity: 0" />
+
     <script type="text/javascript">
         const videoFwd = document.getElementById('video-fwd');
         const videoRev = document.getElementById('video-rev');
@@ -52,6 +66,8 @@
                 videoFwd.pause();
                 videoHangup.play();
             } else if (event.data === 'userPickedUp') {
+                console.log('Content Slug:', contentSlug);
+                console.log('Content Timeout:', contentTimeoutDuration);
                 videoRev.classList.remove("show");
                 videoHangup.classList.remove("show");
 
@@ -64,16 +80,40 @@
                 videoHangup.currentTime = 0;
             } else if (event.data === 'inPortal') {
                 videoFwd.play();
-            } else if (event.data === 'inContent') {
-
-                // end of the content at 1m06s
-                contentTimeout = setTimeout(() => {
-                    videoFwd.classList.remove("show");
-                    videoRev.classList.add("show");
-                    videoRev.play();
-                }, 66000);
+            } else if (event.data === 'contentFinished') {
+                videoFwd.classList.remove("show");
+                videoRev.classList.add("show");
+                videoRev.play();
             }
         };
+
+        // Function to generate HTML for each video and add it to the page
+        function generateVideoHTML() {
+            const container = document.querySelector('.dps-container');
+
+            // Iterate through the videos object
+            for (const videoKey in videos) {
+                if (videos.hasOwnProperty(videoKey)) {
+                    const video = videos[videoKey];
+
+                    // Create HTML using template literals
+                    const videoHTML = `
+                        <div class="dps dps-${videoKey}">
+                            <h1>${video.title}</h1>
+                            <div class="article">
+                                ${video.article}
+                            </div>
+                        </div>
+                    `;
+
+                    // Append the video HTML to the container
+                    container.insertAdjacentHTML('beforeend', videoHTML);
+                }
+            }
+        };
+
+
+        // window.addEventListener('load', generateVideoHTML); 
     </script>
 </body>
 

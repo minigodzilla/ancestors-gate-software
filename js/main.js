@@ -45,6 +45,8 @@ let portalTimeout;
 let contentTimeout;
 let resetTimeout;
 let activeWindow;
+let contentSlug;
+let contentTimeoutDuration;
 
 window.addEventListener('focus', (event) => {
   activeWindow = true;
@@ -61,7 +63,7 @@ worker.port.onmessage = function (event) {
   if (event.data === 'userHungUpDuringCountdown' || event.data === 'userHungUpDuringPortal' || event.data === 'userHungUpDuringContent') {
     clearTimeout(countdownTimeout);
     clearTimeout(portalTimeout);
-    clearTimeout(contentTimeout);
+    clearTimeout(contentTimeoutDuration);
     clearTimeout(resetTimeout);
     inCountdown = false;
     inPortal = false;
@@ -95,7 +97,7 @@ worker.port.onmessage = function (event) {
 
         if (activeWindow) worker.port.postMessage('contentFinished');
       }
-    }, contentTimeout);
+    }, 10000 + contentTimeoutDuration);
   }
 };
 
@@ -112,16 +114,16 @@ function getRandomVideo() {
   // Set the 'contentSlug' global variable to the name of the selected video
   contentSlug = videoKeys[randomIndex];
 
-  // Set the 'contentTimeout' global variable to the length of the selected video
-  contentTimeout = randomVideo.length;
+  // Set the 'contentTimeoutDuration' global variable to the length of the selected video
+  contentTimeoutDuration = randomVideo.length;
 
   console.log('Content Slug:', contentSlug);
-  console.log('Content Timeout:', contentTimeout);
+  console.log('Content Timeout:', contentTimeoutDuration);
 
   // Return an object with both content length and content slug (optional)
   return {
     contentSlug,
-    contentTimeout,
+    contentTimeoutDuration,
   };
 }
 

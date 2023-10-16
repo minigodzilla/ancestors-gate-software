@@ -63,15 +63,12 @@
 
                 video.play();
 
-                // end of the content at 1m06s
-                // .5s added to compensate for timing issue w/video
-                contentTimeout = setTimeout(() => {
-                    video.classList.remove("show");
-                    videoRev.classList.add("show");
+            } else if (event.data === 'contentFinished') {
+                video.classList.remove("show");
+                videoRev.classList.add("show");
 
-                    video.pause();
-                    videoRev.play();
-                }, contentTimeout);
+                video.pause();
+                videoRev.play();
             } else if (event.data === 'userHungUpDuringCountdown') {
                 videoCountdown.classList.remove("show");
 
