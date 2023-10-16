@@ -5,7 +5,7 @@ const videos = {
   gawai: {
     title: 'Gawai',
     article: '<p>Lorem Ipsum</p>',
-    length: 210000, // 3:30
+    length: 15000, //210000, // 3:30
     credit1Title: 'Co-researchers',
     credit1Names: ['Tina Carmillia', 'Adrian J Nyaoi', 'Steve Tekaronhiake Diabo'],
     credit2Title: 'Camera',
@@ -16,7 +16,7 @@ const videos = {
   paoakalani: {
     title: 'Kuʻu Pua I Paoakalani',
     article: '<p>Lorem Ipsum</p>',
-    length: 231000, // 3:51
+    length: 15000, // 231000, // 3:51
     credit1Title: 'Co-researchers',
     credit1Names: ['Kuʻuipo Kumukahi', 'Jeninne Heleloa', 'Hawaiian Music Perpetuation Society (HMPS)', 'Steve Tekaronhiake Diabo'],
     credit2Title: 'Music performed by',
@@ -27,7 +27,7 @@ const videos = {
   'the-difference': {
     title: 'The Difference (100 years from now)',
     article: '<p>Lorem Ipsum</p>',
-    length: 283000, // 4:43
+    length: 15000, // 283000, // 4:43
     credit1Title: 'Co-researchers',
     credit1Names: ['Elliott Doxtater-Wynn', 'Steve Tekaronhiake Diabo'],
     credit2Title: 'Music performed by',
