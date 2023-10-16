@@ -48,7 +48,6 @@
 
 
 
-
     <script type="text/javascript">
         const videoFwd = document.getElementById('video-fwd');
         const videoRev = document.getElementById('video-rev');
@@ -69,6 +68,8 @@
                 videoFwd.pause();
                 videoHangup.play();
             } else if (event.data === 'userHungUpDuringContent') {
+                // reset the content finished timeout
+                clearTimeout(dpsShownAfterContentFinishedTimeout);
                 dps.classList.remove("show");
                 dps.classList.add("no-animation");
                 dpsIsShown = false;
@@ -92,10 +93,9 @@
                     }, 2500);
                 }
             } else if (event.data === 'userPickedUp') {
-                // reset all timeouts and dps
+                // reset most timeouts and dps (minus the content finished timeout)
                 clearTimeout(dpsShownAfter10SecondsTimeout);
                 clearTimeout(dpsShownAfterUserHangsUpTimeout);
-                clearTimeout(dpsShownAfterContentFinishedTimeout);
 
                 userIsInvested = false;
                 dps.classList.remove("show");
