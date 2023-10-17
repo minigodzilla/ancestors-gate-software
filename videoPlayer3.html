@@ -34,13 +34,15 @@
         const videoFwd = document.getElementById('video-fwd');
         const videoRev = document.getElementById('video-rev');
         const videoHangup = document.getElementById('video-hangup');
-        const dps = document.querySelector('.dps-paoakalani');
+        let dps;
         let dpsShownAfterContentFinishedTimeout;
         let dpsShownAfterUserHangsUpTimeout;
         let dpsShownAfter10SecondsTimeout;
 
         let postMessageHandler = function (event) {
-
+            if (event.data.includes('contentSlug:')) {
+                dps = document.querySelector('.dps-' + event.data.split(': ')[1]);
+            }
             if (event.data === 'userHungUpDuringCountdown') {
                 videoFwd.classList.remove("show");
                 videoFwd.pause();
@@ -79,7 +81,7 @@
                 clearTimeout(dpsShownAfterContentFinishedTimeout);
 
                 userIsInvested = false;
-                dps.classList.remove("show");
+                if (dps) dps.classList.remove("show");
                 dpsIsShown = false;
 
                 if (dpsIsShown) {
@@ -160,7 +162,7 @@
                             <div class="credit-column">
                             <h2>Learn more</h2>
                             <h4>For further research, please scan</h4>
-                            <img class="qr" src="assets/img/qr-${videoKey}.png" />
+                            <img class="qr" src="assets/img/qr-yt-${videoKey}.png" />
                             <h4>Produced with the support of</h4>
                             <img class="sponsors" src="assets/img/sponsors.png" />
                             </div>

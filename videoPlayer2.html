@@ -49,13 +49,9 @@
         let dpsShownAfter10SecondsTimeout;
 
         let postMessageHandler = function (event) {
-
-            // if event data contains the string "contentSlug", then set the contentSlug variable to what appears after the :
-
             if (event.data.includes('contentSlug:')) {
                 dps = document.querySelector('.dps-' + event.data.split(': ')[1]);
             }
-
             if (event.data === 'userHungUpDuringCountdown') {
                 videoFwd.classList.remove("show");
                 videoFwd.pause();

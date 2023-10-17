@@ -118,6 +118,11 @@ h1 {
     font-weight: 400;
 }
 
+.dps-the-difference h1 {
+    font-size: 3.25em;
+    line-height: 3;
+}
+
 h2 {
     font-size: 3em;
     font-weight: 400;
