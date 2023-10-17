@@ -28,26 +28,7 @@
     <video id="video-hangup" src="assets/video/portal-hangup-tr.mp4" muted></video>
 
     <div class="dps-container">
-        <div class="dps right dps-paoakalani">
-            <div class="credit-container">
-                <div class="credit-column">
-                    <h2>Credits</h2>
-                    <p>Co-researchers</p>
-                    <h3>Kuʻuipo Kumukahi</h3>
-                    <h3>Jeninne Heleloa</h3>
-                    <h3>Hawaiian Music Perpetuation Society (HMPS)</h3>
-                    <h3>Steve Tekaronhiake Diabo</h3>
-                </div>
-                <div class="credit-column">
-                    <h2>Learn more</h2>
-                    <p>For further research, visit</p>
-                    <h3>http://ancestorsgate.com/paoakalani</h3>
-                    <img src="assets/img/qr-paoakalani.png" />
-                </div>
-            </div>
-        </div>
     </div>
-
 
     <script type="text/javascript">
         const videoFwd = document.getElementById('video-fwd');
@@ -156,8 +137,9 @@
             }
         };
 
-        // Function to generate HTML for each video and add it to the page
+        // Function to generate and append the HTML blocks for videos
         function generateVideoHTML() {
+            // Get a reference to the container where you want to append the HTML blocks
             const container = document.querySelector('.dps-container');
 
             // Iterate through the videos object
@@ -165,23 +147,53 @@
                 if (videos.hasOwnProperty(videoKey)) {
                     const video = videos[videoKey];
 
-                    // Create HTML using template literals
-                    const videoHTML = `
-                        <div class="dps dps-${videoKey}">
-                            <h1>${video.title}</h1>
-                            <div class="article">
-                                ${video.article}
+                    // Create the HTML template using template literals
+                    const html = `
+                        <div class="dps right dps-${videoKey}">
+                        <div class="credit-container">
+                            <div class="credit-column">
+                            <h2>Credits</h2>
+                            ${createCreditSection(video.credit1Title, video.credit1Names)}
+                            ${createCreditSection(video.credit2Title, video.credit2Names)}
+                            ${createCreditSection(video.credit3Title, video.credit3Names)}
                             </div>
+                            <div class="credit-column">
+                            <h2>Learn more</h2>
+                            <h4>For further research, please scan</h4>
+                            <img class="qr" src="assets/img/qr-${videoKey}.png" />
+                            <h4>Produced with the support of</h4>
+                            <img class="sponsors" src="assets/img/sponsors.png" />
+                            </div>
+                        </div>
                         </div>
                     `;
 
-                    // Append the video HTML to the container
-                    container.insertAdjacentHTML('beforeend', videoHTML);
+                    // Create a div element and set its innerHTML to the generated HTML
+                    const div = document.createElement('div');
+                    div.innerHTML = html;
+
+                    // Append the div to the container
+                    container.appendChild(div);
                 }
             }
-        };
 
-        // window.addEventListener('load', generateVideoHTML); 
+            // Function to create a credit section using template literals
+            function createCreditSection(title, names) {
+                if (!title || !names || !Array.isArray(names) || names.length === 0) {
+                    return ''; // Return an empty string if no data is provided
+                }
+
+                const creditHtml = `
+                    <h4>${title}</h4>
+                    ${names.map(name => `<h3>${name}</h3>`).join('')}
+                `;
+
+                return creditHtml;
+            }
+        }
+
+        // Add an event listener to run the function on the "load" event
+        window.addEventListener('load', generateVideoHTML);
     </script>
 </body>
 

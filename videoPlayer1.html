@@ -41,6 +41,7 @@
 
             if (event.data === 'userPickedUp') {
                 getRandomVideo();
+                worker.port.postMessage('contentSlug: ' + contentSlug);
                 video = document.getElementById('video-' + contentSlug);
                 videoHangup.classList.remove("show");
                 videoRev.classList.remove("show");
