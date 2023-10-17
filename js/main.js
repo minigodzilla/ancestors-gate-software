@@ -15,7 +15,8 @@ const videos = {
   },
   paoakalani: {
     title: 'Kuʻu Pua I Paoakalani',
-    article: '<p>Lorem Ipsum</p>',
+    article:
+      '<p>Queen Liliʻuokalani was the last sovereign to govern the Kingdom of Hawaiʻi prior to American annexation, and was loved and respected by the Hawaiian people. Refined and intelligent, as a princess she received Western education, and her creative pastimes included songwriting and poetry.</p><p>Following the overthrow of the monarchy, she was imprisoned, and held in her own palace, for eight months. Although she was under a news embargo, she was able to stay abreast of news of her own people, and of the world at large, through the delivery of flower bouquets from her gardens, which were covertly wrapped in newspapers. These were usually delivered by Johnny, the young son of her protégé and lady-in-waiting.</p><p>Nane and kaona, riddles and layered meanings, can be found in many traditional Hawaiian songs and stories, including this mele that was written during her imprisonment. The many beautiful flowers represent the people of the Hawaiian islands. The fragrance is the news of her beloved people, and the gentle breeze which brings it is young Johnny.</p><p>Of the legacies left behind by Queen Liliʻuokalani, her music is a preservation of valuable knowledge, creativity and culture from an important era in Hawaiian history.</p>',
     length: 231000, // 3:51
     credit1Title: 'Co-researchers',
     credit1Names: ['Kuʻuipo Kumukahi', 'Jeninne Heleloa', 'Hawaiian Music Perpetuation Society (HMPS)', 'Steve Tekaronhiake Diabo'],
@@ -26,7 +27,7 @@ const videos = {
   },
   'the-difference': {
     title: 'The Difference (100 years from now)',
-    article: '<p>Lorem Ipsum</p>',
+    article: '<p>100 years ago, First Nation medicine people and singers came forward to record their traditional drum songs. 100 years later, artists, musicians, and drummers have begun to find and relearn those songs. We have been learning from song keepers, songs handed down from long ago.</p><p>What are the teachings from those songs?</p><p>The Difference is a song for the future. It asks future generations 100 years in the future: What did you do to save Mother Earth?  The lyrics are in both English and Anishnaabemowin (Ojibway).  English for mainstream culture. Ojibway speaks to your spirit. This is a song of reflection.</p><p>The song is combined with visuals from various travels, hikes and explorations across Turtle Island and beyond.</p>',
     length: 283000, // 4:43
     credit1Title: 'Co-researchers',
     credit1Names: ['Elliott Doxtater-Wynn', 'Steve Tekaronhiake Diabo'],
