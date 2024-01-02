@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Video Player 1</title>
+    <link rel="shortcut icon" href="#">
+    <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <audio class="tone" id="tone-1" src="assets/audio/dial-1.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-2" src="assets/audio/dial-2.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-3" src="assets/audio/dial-3.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-4" src="assets/audio/dial-4.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-5" src="assets/audio/dial-5.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-6" src="assets/audio/dial-6.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-7" src="assets/audio/dial-7.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-8" src="assets/audio/dial-8.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-9" src="assets/audio/dial-9.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-star" src="assets/audio/dial-star.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-0" src="assets/audio/dial-0.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
+
+    <video id="video-countdown" src="assets/video/countdown.mp4"></video>
+    <video id="video-hangup" src="assets/video/portal-hangup.mp4"></video>
+    <video id="video-rev" src="assets/video/portal-rev.mp4"></video>
+    <video id="video-shutoff" src="assets/video/shutoff.mp4"></video>
+    <video id="video-gawai" src="assets/video/video-gawai.mp4"></video>
+    <video id="video-paoakalani" src="assets/video/video-paoakalani.mp4"></video>
+    <video id="video-the-difference" src="assets/video/video-the-difference.mp4"></video>
+
+    <script type="text/javascript">
+        const videoCountdown = document.getElementById('video-countdown');
+        const videoHangup = document.getElementById('video-hangup');
+        const videoRev = document.getElementById('video-rev');
+        const videoShutoff = document.getElementById('video-shutoff');
+
+        let postMessageHandler = function (event) {
+
+            if (event.data === 'userPickedUp') {
+                getRandomVideo();
+                worker.port.postMessage('contentSlug: ' + contentSlug);
+                video = document.getElementById('video-' + contentSlug);
+                videoHangup.classList.remove("show");
+                videoRev.classList.remove("show");
+                videoShutoff.classList.remove("show");
+
+                setTimeout(() => {
+                    videoCountdown.classList.add("show"); // fixes a flicker
+                }, 50);
+
+                videoCountdown.currentTime = 0;
+                videoHangup.currentTime = 0;
+                videoRev.currentTime = 0;
+                videoShutoff.currentTime = 0;
+                video.currentTime = 0;
+
+                videoCountdown.play();
+            } else if (event.data === 'inContent') {
+                videoCountdown.classList.remove("show");
+
+                video.classList.add("show");
+
+                video.play();
+
+            } else if (event.data === 'contentFinished') {
+                video.classList.remove("show");
+                videoRev.classList.add("show");
+
+                video.pause();
+                videoRev.play();
+            } else if (event.data === 'userHungUpDuringCountdown') {
+                videoCountdown.classList.remove("show");
+
+                videoShutoff.classList.add("show");
+
+                videoCountdown.pause();
+                videoShutoff.play();
+            } else if (event.data === 'userHungUpDuringPortal') {
+                videoCountdown.classList.remove("show");
+
+                videoHangup.classList.add("show");
+
+                videoCountdown.pause();
+                videoHangup.play();
+            } else if (event.data === 'userHungUpDuringContent') {
+                video.classList.remove("show");
+
+                videoHangup.classList.add("show");
+
+                video.pause();
+                videoHangup.play();
+            }
+        };
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Video Player 2</title>
+    <link rel="shortcut icon" href="#">
+    <script type="text/javascript" src="js/videoSyncWorker.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <audio class="tone" id="tone-1" src="assets/audio/dial-1.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-2" src="assets/audio/dial-2.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-3" src="assets/audio/dial-3.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-4" src="assets/audio/dial-4.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-5" src="assets/audio/dial-5.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-6" src="assets/audio/dial-6.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-7" src="assets/audio/dial-7.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-8" src="assets/audio/dial-8.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-9" src="assets/audio/dial-9.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-star" src="assets/audio/dial-star.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-0" src="assets/audio/dial-0.ogg" preload="auto"></audio>
+    <audio class="tone" id="tone-pound" src="assets/audio/dial-pound.ogg" preload="auto"></audio>
+
+    <video id="video-fwd" src="assets/video/portal-fwd-tl.mp4" muted></video>
+    <video id="video-rev" src="assets/video/portal-rev-tl.mp4" muted></video>
+    <video id="video-hangup" src="assets/video/portal-hangup-tl.mp4" muted></video>
+
+    <div class="dps-container">
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+        const videoFwd = document.getElementById('video-fwd');
+        const videoRev = document.getElementById('video-rev');
+        const videoHangup = document.getElementById('video-hangup');
+        let dps;
+        let dpsShownAfterContentFinishedTimeout;
+        let dpsShownAfterUserHangsUpTimeout;
+        let dpsShownAfter10SecondsTimeout;
+
+        let postMessageHandler = function (event) {
+            if (event.data.includes('contentSlug:')) {
+                dps = document.querySelector('.dps-' + event.data.split(': ')[1]);
+            }
+            if (event.data === 'userHungUpDuringCountdown') {
+                videoFwd.classList.remove("show");
+                videoFwd.pause();
+            } else if (event.data === 'userHungUpDuringPortal') {
+                videoFwd.classList.remove("show");
+                videoHangup.classList.add("show");
+                videoFwd.pause();
+                videoHangup.play();
+            } else if (event.data === 'userHungUpDuringContent') {
+                // reset the content finished timeout
+                clearTimeout(dpsShownAfterContentFinishedTimeout);
+                dps.classList.remove("show");
+                dps.classList.add("no-animation");
+                dpsIsShown = false;
+                videoFwd.classList.remove("show");
+                videoRev.classList.remove("show");
+                videoHangup.classList.add("show");
+                videoFwd.pause();
+                videoHangup.play();
+
+                // if user is invested, show DPS after 2.5 seconds and then hide after 1 minute
+                if (userIsInvested) {
+                    setTimeout(() => {
+                        dps.classList.remove("no-animation", "half-opacity");
+                        dps.classList.add("show");
+                        dpsIsShown = true;
+                        dpsShownAfterUserHangsUpTimeout = setTimeout(() => {
+                            userIsInvested = false;
+                            dps.classList.remove("show");
+                            dpsIsShown = false;
+                        }, 60000);
+                    }, 2500);
+                }
+            } else if (event.data === 'userPickedUp') {
+                // reset most timeouts and dps (minus the content finished timeout)
+                clearTimeout(dpsShownAfter10SecondsTimeout);
+                clearTimeout(dpsShownAfterUserHangsUpTimeout);
+
+                userIsInvested = false;
+                if (dps) dps.classList.remove("show");
+                dpsIsShown = false;
+
+                if (dpsIsShown) {
+                    // iterate through all DPS and hide them
+                    const dps = document.querySelectorAll('.dps');
+                    for (let i = 0; i < dps; i++) {
+                        dps[i].classList.remove("show");
+                    }
+                    dpsIsShown = false;
+                }
+                videoRev.classList.remove("show");
+                videoHangup.classList.remove("show");
+
+                setTimeout(() => {
+                    videoFwd.classList.add("show"); // fixes a flicker
+                }, 50);
+
+                videoFwd.currentTime = 0;
+                videoRev.currentTime = 0;
+                videoHangup.currentTime = 0;
+            } else if (event.data === 'inPortal') {
+                videoFwd.play();
+            } else if (event.data === 'inContent') {
+                setTimeout(() => {
+                    videoFwd.classList.remove("show");
+                }, 50);
+                // show DPS after 10 seconds
+                dpsShownAfter10SecondsTimeout = setTimeout(() => {
+                    if (inContent) {
+                        userIsInvested = true;
+                        console.log('userIsInvested: ' + userIsInvested);
+                        dps.classList.remove("no-animation");
+                        dps.classList.add("show", "half-opacity");
+                        dpsIsShown = true;
+                    }
+                }, 10000);
+            } else if (event.data === 'contentFinished') {
+                dps.classList.add("no-animation");
+                dps.classList.remove("show");
+                dpsIsShown = false;
+                videoFwd.classList.remove("show");
+                videoRev.classList.add("show");
+                videoRev.play();
+                // show DPS after 5 seconds and then hide after 1 minute
+                userIsInvested = false;
+                setTimeout(() => {
+                    dps.classList.remove("no-animation", "half-opacity");
+                    dps.classList.add("show");
+                    dpsIsShown = true;
+                    dpsShownAfterContentFinishedTimeout = setTimeout(() => {
+                        dps.classList.remove("show");
+                        dpsIsShown = false;
+                    }, 60000);
+                }, 5000);
+            }
+        };
+
+        // Function to generate HTML for each video and add it to the page
+        function generateVideoHTML() {
+            const container = document.querySelector('.dps-container');
+
+            // Iterate through the videos object
+            for (const videoKey in videos) {
+                if (videos.hasOwnProperty(videoKey)) {
+                    const video = videos[videoKey];
+
+                    // Create HTML using template literals
+                    const videoHTML = `
+                        <div class="dps left dps-${videoKey}">
+                            <h1>${video.title}</h1>
+                            <div class="article">
+                                ${video.article}
+                            </div>
+                        </div>
+                    `;
+
+                    // Append the video HTML to the container
+                    container.insertAdjacentHTML('beforeend', videoHTML);
+                }
+            }
+        };
+
+        window.addEventListener('load', generateVideoHTML); 
+    </script>
+</body>
+
+</html>
