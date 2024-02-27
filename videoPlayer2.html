@@ -51,6 +51,10 @@
                 videoHangup.classList.add("show");
                 videoFwd.pause();
                 videoHangup.play();
+
+                setTimeout(() => {
+                    videoHangup.classList.remove("show");
+                }, 1000);
             } else if (event.data === 'userHungUpDuringContent') {
                 // reset the content finished timeout
                 clearTimeout(dpsShownAfterContentFinishedTimeout);
@@ -62,6 +66,10 @@
                 videoHangup.classList.add("show");
                 videoFwd.pause();
                 videoHangup.play();
+
+                setTimeout(() => {
+                    videoHangup.classList.remove("show");
+                }, 1000);
 
                 // if user is invested, show DPS after 2.5 seconds and then hide after 1 minute
                 if (userIsInvested) {
@@ -126,6 +134,11 @@
                 videoFwd.classList.remove("show");
                 videoRev.classList.add("show");
                 videoRev.play();
+
+                setTimeout(() => {
+                    videoRev.classList.remove("show");
+                }, 5000);
+
                 // show DPS after 5 seconds and then hide after 1 minute
                 userIsInvested = false;
                 setTimeout(() => {

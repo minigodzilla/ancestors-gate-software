@@ -51,7 +51,13 @@
                 videoHangup.classList.add("show");
                 videoFwd.pause();
                 videoHangup.play();
+
+                setTimeout(() => {
+                    videoHangup.classList.remove("show");
+                }, 1000);
             } else if (event.data === 'userHungUpDuringContent') {
+                // reset the content finished timeout
+                clearTimeout(dpsShownAfterContentFinishedTimeout);
                 dps.classList.remove("show");
                 dps.classList.add("no-animation");
                 dpsIsShown = false;
@@ -60,6 +66,10 @@
                 videoHangup.classList.add("show");
                 videoFwd.pause();
                 videoHangup.play();
+
+                setTimeout(() => {
+                    videoHangup.classList.remove("show");
+                }, 1000);
 
                 // if user is invested, show DPS after 2.5 seconds and then hide after 1 minute
                 if (userIsInvested) {
@@ -75,10 +85,9 @@
                     }, 2500);
                 }
             } else if (event.data === 'userPickedUp') {
-                // reset all timeouts and dps
+                // reset most timeouts and dps (minus the content finished timeout)
                 clearTimeout(dpsShownAfter10SecondsTimeout);
                 clearTimeout(dpsShownAfterUserHangsUpTimeout);
-                clearTimeout(dpsShownAfterContentFinishedTimeout);
 
                 userIsInvested = false;
                 if (dps) dps.classList.remove("show");
@@ -125,13 +134,18 @@
                 videoFwd.classList.remove("show");
                 videoRev.classList.add("show");
                 videoRev.play();
+
+                setTimeout(() => {
+                    videoRev.classList.remove("show");
+                }, 5000);
+
                 // show DPS after 5 seconds and then hide after 1 minute
                 userIsInvested = false;
                 setTimeout(() => {
                     dps.classList.remove("no-animation", "half-opacity");
                     dps.classList.add("show");
                     dpsIsShown = true;
-                    setTimeout(() => {
+                    dpsShownAfterContentFinishedTimeout = setTimeout(() => {
                         dps.classList.remove("show");
                         dpsIsShown = false;
                     }, 60000);
@@ -141,7 +155,6 @@
 
         // Function to generate and append the HTML blocks for videos
         function generateVideoHTML() {
-            // Get a reference to the container where you want to append the HTML blocks
             const container = document.querySelector('.dps-container');
 
             // Iterate through the videos object
