@@ -1,0 +1,23 @@
+{
+  "name": "ancestors-gate-software",
+  "version": "1.0.0",
+  "description": "Ancestors' Gate Software",
+  "author": "Steve Diabo",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js & npm run scss",
+    "scss": "sass --watch public/scss/style.scss public/css/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minigodzilla/ancestors-gate-software.git"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "open": "^10.0.4",
+    "sass": "^1.63.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
