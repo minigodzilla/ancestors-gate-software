@@ -2,6 +2,15 @@ const worker = new SharedWorker('js/videoSyncWorker.js');
 
 // data object of the site's content
 const videos = {
+  'suol-duoraana': {
+    title: 'Suol duoraana',
+    article: '<p>Suol Duoraana, or "Soul of the Path," is a love letter from musician Keskil Baishev to his community and his peoples.</p><p>In it, he refers to the "lineages and kinships" of his people -- this refers to both their families and ancestors, and to all other Turkic peoples, to which the Sakha are closely related by culture and ancestry.</p><p>As we walk through our lives, we should all remember that our ancestors walk with us -- both in blood and in spirit. Our ancestors are present in all aspects of our lives, our community and our environment. They protect us, guide us, and provide for us.</p><p>To celebrate our cultures today, as we always have, is to give our ancestors life.</p>',
+    length: 290000, // 4:50
+    credit1Title: 'Music by',
+    credit1Names: ['Keskil Baishev'],
+    credit2Title: 'Translation',
+    credit2Names: ['Keskil Baishev', 'Sargylana Atlasova', 'Peter Samsonov', 'Steve Tekaronhiake Diabo'],
+  },
   gawai: {
     title: 'Gawai',
     article:
